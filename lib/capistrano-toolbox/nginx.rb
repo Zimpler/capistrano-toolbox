@@ -3,7 +3,6 @@ require 'capistrano-toolbox/helpers'
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :deploy do
     namespace :nginx do
-      after "update_config", "reload"
 
       desc "Updates nginx config"
       task :update_config do
@@ -31,4 +30,5 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
   end
 
+  after "deploy:nginx:update_config", "deploy:nginx:reload"
 end
