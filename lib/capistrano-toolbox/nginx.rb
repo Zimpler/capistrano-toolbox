@@ -9,14 +9,14 @@ Capistrano::Configuration.instance(:must_exist).load do
       task :update_config do
         config_dir = fetch(:nginx_remote_config_dir)
 
-        config = fetch(:nginx_config)
+        config = fetch(:nginx_config, nil)
         if config
           available_path = File.join(config_dir, "#{application}.conf")
           put_as_root(config, available_path)
           surun "nxensite #{application}.conf"
         end
 
-        ssl_config = fetch(:nginx_ssl_config)
+        ssl_config = fetch(:nginx_ssl_config, nil)
         if ssl_config
           available_ssl_path = File.join(config_dir, "#{application}-ssl.conf")
           put_as_root(ssl_config, available_ssl_path)
