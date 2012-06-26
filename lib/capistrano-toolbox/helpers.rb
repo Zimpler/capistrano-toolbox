@@ -26,4 +26,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       `ssh #{server} -l root "#{command.gsub('"','\\"')}"`
     end
   end
+
+  def remote_file_exists?(path)
+    'true' == capture("test -f #{path} && echo true").strip
+  end
 end
