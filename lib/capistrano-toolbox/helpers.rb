@@ -28,6 +28,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   end
 
   def remote_file_exists?(path)
-    'true' == capture("test -f #{path} && echo true").strip
+    'true' == capture("test -f #{path} && echo true || echo false").strip
   end
 end
