@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'capistrano-toolbox'
-  s.version     = '0.0.5'
+  s.version     = '0.0.6'
   s.date        = '2012-06-26'
   s.summary     = "Some useful capistrano tools."
   s.description = "Some useful capistrano tools, such as unicorn restart, nginx config etc."
