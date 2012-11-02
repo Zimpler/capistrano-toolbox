@@ -4,6 +4,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   namespace :deploy do
     namespace :unicorn do
       task :restart, :roles => :app, :except => { :no_release => true } do
+        rails_env = fetch(:rails_env, "production")
         servers = find_servers roles: :app
         servers.each do |server|
           old_pid = nil
@@ -11,7 +12,7 @@ Capistrano::Configuration.instance(:must_exist).load do
             old_pid = capture("cat #{unicorn_pid}", hosts: [server])
             cmd = "kill -s USR2 #{old_pid}"
           else
-            cmd = "RAILS_ENV=production /etc/init.d/unicorn start"
+            cmd = "RAILS_ENV=#{rails_env} /etc/init.d/unicorn start"
           end
 
           run(cmd, shell: '/bin/bash', hosts: [server])
