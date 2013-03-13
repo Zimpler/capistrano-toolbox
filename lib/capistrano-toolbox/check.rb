@@ -40,7 +40,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       unless @ignore_checks
         rails_env = fetch(:rails_env, "production")
         # If there are pending migrations, there will be a message on STDERR which is enough to abort.
-        run "cd #{release_path}; bundle exec rake -s RAILS_ENV=#{rails_env} db:abort_if_pending_migrations"
+        run "cd #{release_path}; #{bundle_cmd} exec rake -s RAILS_ENV=#{rails_env} db:abort_if_pending_migrations"
       end
     end
   end
