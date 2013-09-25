@@ -6,26 +6,31 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       desc "Updates nginx config"
       task :update_config do
-        config_dir = fetch(:nginx_remote_config_dir)
+        nginx_user     = fetch(:nginx_user, "root")
+        nginx_use_sudo = fetch(:nginx_use_sudo, false)
 
-        config = fetch(:nginx_config, nil)
+        config_dir = fetch(:nginx_remote_config_dir)
+        config     = fetch(:nginx_config, nil)
         if config
           available_path = File.join(config_dir, "#{application}.conf")
-          put_as_root(config, available_path)
-          surun "nxensite #{application}.conf"
+          put_as_root(nginx_user, config, available_path, nginx_use_sudo)
+          surun(nginx_user, "nxensite #{application}.conf", nginx_use_sudo)
         end
 
         ssl_config = fetch(:nginx_ssl_config, nil)
         if ssl_config
           available_ssl_path = File.join(config_dir, "#{application}-ssl.conf")
-          put_as_root(ssl_config, available_ssl_path)
-          surun "nxensite #{application}-ssl.conf"
+          put_as_root(nginx_user, ssl_config, available_ssl_path, nginx_use_sudo)
+          surun(nginx_user, "nxensite #{application}-ssl.conf", nginx_use_sudo)
         end
       end
 
       desc "Reload nginx config"
       task :reload, :roles => :app, :except => { :no_release => true } do
-        surun "service nginx reload"
+        nginx_user     = fetch(:nginx_user, "root")
+        nginx_use_sudo = fetch(:nginx_use_sudo, false)
+
+        surun(nginx_user, "service nginx reload", nginx_use_sudo)
       end
     end
   end
